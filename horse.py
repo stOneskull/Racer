@@ -16,8 +16,7 @@ class Horse:
         self.strength = d(70, 90)
         self.speed = d(50, 80)
         self.rank = 171 - self.speed - self.strength
-        self.secret = (self.weakness + 2) % 4
-        if not self.secret: self.secret = 4
+        self.secret = (self.weakness + 2) % 4 or 4
         self.runs, self.wins = 0, 0
         self.stars, self.trackpoints = 0, 0
         self.badges = []
@@ -44,7 +43,7 @@ class Horse:
                 if self.speed < 111:
                     self.speed += 1
 
-        self.rank -= (amount + 1) // 2
+        self.rank -= amount // 2
 
         if self.rank < 1: self.rank = 1
         if self.rank == 1:
