@@ -23,11 +23,11 @@ def typecheck(thedata):
     print(f'length: {len(thedata)}')
 
 
-def test(pickled):
+def test(pickled='horselist.dat'):
     thedata = file2data(pickled)
     typecheck(thedata)
 
 
 
 if __name__ == '__main__':
-    test('horselist.dat')
+    test()
