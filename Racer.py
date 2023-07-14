@@ -617,8 +617,8 @@ def sleep():
         print('\n' * d(0, 1))
 
     for theflag in u.flags: u.flags[theflag] = 0
-    u.flags['guide'] = 1
-    u.flags['bookie'] = 1
+    flag('guide')
+    flag('bookie')
 
     return game
 
@@ -703,7 +703,6 @@ def clue():
             + '\nIt is time.')
 
     if not u.meetnext and u.met == 0:  # no more unmet peeps, all done
-        # if not u.meetnext instead of if len(u.meetnext) == 0
         u.clued = 2
         u.met = 2
         flag('options')
@@ -949,7 +948,7 @@ def bookie():
         sh(0.23)
 
         for lano, horsey in u.lanes.items():
-            print('   |  ' + str(lano) + '  ' + horsey.name)
+            print(f'   |  {lano}  {horsey.name}')
 
         lane = 23
 
@@ -968,7 +967,6 @@ def bookie():
             return bet(lane)
 
         if not u.ticket: return menu
-        # instead of if len(u.ticket) == 0
 
         print(u.ticket)
 
@@ -994,7 +992,7 @@ def bookie():
             a = u.ticket[winner] * winner.odds
             winnings = round(a, 2)
             u.money += winnings
-            print('\nYou receive $' + str(format(winnings, '0.2f')) + '!')
+            print(f'\nYou receive ${winnings:0.2f}!')
             sh(3)
             saymoney()
 
@@ -1054,7 +1052,6 @@ def bio(lane):
     print('\nHorse rank:', horse.rank)
 
     if not horse.badges:
-        # instead of if len(horse.badges) == 0
         print('\nNo badges')
     else:
         print('\nHorse stars:', horse.stars)
@@ -1090,9 +1087,11 @@ def menu():
 
     for num, door in u.doors.items():
 
-        if door in u.flags and u.flags[door] == 1: continue
+        if door in u.flags and u.flags[door] == 1:
+            continue
 
-        print(' {0} - {1}'.format(num, door))
+        print(f' {num} - {door}')
+
 
     while True:
 
@@ -1339,7 +1338,7 @@ def setup():
 
     Horse.counter = 0
 
-    print('\nMaximize your window\n')
+    print('\nMaximize your window for Maximum fun\n')
 
     horses69 = 'Horses per race, ' + u.name + '? (enter 6-9) \n '
 
@@ -1500,9 +1499,8 @@ def wonderwall(egg):
     '''the humpty dumpty loop trick'''
 
     while Heart is True:
-
-        cream = egg()
-        egg = cream
+        egg = egg()
 
 
-wonderwall(main)
+if __name__ == '__main__':
+    wonderwall(main)
