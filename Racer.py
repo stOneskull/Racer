@@ -234,16 +234,16 @@ def startnhalf():
             slip = d(1, 3)
             if slip == 1:
                 if u.seggy == 1:
-                    print('\n  ', start, 'has a tops start..')
+                    print(f'\n   {start} has a tops start..')
                 else:
-                    print('\n  ', start, 'is in the lead..')
+                    print(f'\n   {start} is in the lead..')
             elif slip == 2:
                 if u.seggy == 1:
-                    print('\n  ', start, 'has an ace start..')
+                    print(f'\n   {start} has an ace start..')
                 else:
-                    print('\n  ', start, 'is leading the pack..')
+                    print(f'\n   {start} is leading the pack..')
             else:
-                print('\n  out in front it\'s', start)
+                print(f"\n  out in front it's {start}")
 
         elif i == 1:
             slop = d(1, 3)
