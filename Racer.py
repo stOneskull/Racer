@@ -54,7 +54,7 @@ def saybag():
         v = " " if v == 1 else f"({str(v)})"
         print('                ', k, v)
     print('                              ',
-          f'and ${u.money:.0.2f} cash')
+          f'and ${u.money:.2f} cash')
 
     return menu
 
@@ -818,7 +818,7 @@ def guide():
         note = pony.notice
 
         print(
-            f'Lane {lane:.02d} - [{theodds}] <{ponynum}> {name} {note}'
+            f'Lane {lane:02d} - [{theodds}] <{ponynum}> {name} {note}'
         )
 
     lane = 23
