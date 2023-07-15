@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+__version__ = '0.1.23'
+
 '''Racer
 (c)2017->
 stOneskull'''
@@ -49,10 +51,10 @@ def saybag():
     clr()
     print("\n        You own..\n")
 
-    for k, v in u.bag.items():
-        if v < 1: continue
-        v = " " if v == 1 else f"({str(v)})"
-        print('                ', k, v)
+    for thing, amount in u.bag.items():
+        if amount < 1: continue
+        amount = '' if amount == 1 else f'({amount})'
+        print('                ', thing, amount)
     print('                              ',
           f'and ${u.money:.2f} cash')
 
