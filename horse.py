@@ -45,7 +45,7 @@ class Horse:
 
         self.rank -= amount // 2
 
-        if self.rank < 1: self.rank = 1
+        self.rank = max(self.rank, 1)
         if self.rank == 1:
             self.star('Rank 1')
 
