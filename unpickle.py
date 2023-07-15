@@ -1,3 +1,6 @@
+#unnecessary..
+#just a little fiddle.. 
+
 import pickle
 #from player import U
 
@@ -16,7 +19,7 @@ def file2data(pickled):
 def typecheck(thedata):
     if thedata is None:
         return 
-    types = [list, type, dict]
+    types = [type, dict, list, set, tuple] # ..
     for each in types:
         print(f'{each}: {type(thedata)==each}')
     print(type(thedata))
