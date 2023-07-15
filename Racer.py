@@ -176,9 +176,7 @@ def diffs(oldpossy):
     print(); sh(1.5); print()
     for position, horsey in enumerate(u.possy):
         print(f'{position + 1}: {horsey}', end=" ")
-        if horsey in u.ticket:
-            print(' <-- your horse')
-        else: print(' ')
+        print(' <-- your horse') if horsey in u.ticket else print()
     sh(1); print()
     print(); sh(2.3); print()
 
@@ -450,13 +448,10 @@ def raceroutine(segments):
                 horsey.runs += 1
 
                 if position == 0:
-                    print(f'\n\nWinner is {horsey}', end="")
-                    print('!\n')
+                    print(f'\n\nWinner is {horsey}!\n')
                     sh(3)
-                    print(f'1: {horsey}', end=" ")
-                else:
-                    print(f'{position + 1}: {horsey}', end=" ")
-                    print(' <-- your horse') if horsey in u.ticket else ' '
+                print(f'{position + 1}: {horsey}', end=" ")
+                print(' <-- your horse') if horsey in u.ticket else print()
                 sh(1)
 
         clr(2)
