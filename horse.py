@@ -30,7 +30,7 @@ class Horse:
         if value in ['sp', 'speed', 'both']:
             self.speed += amount
             if self.speed >= 123:
-                if self.wins > 0:
+                if self.wins:
                     self.star('Rocket')
                 if self.strength < 100:
                     self.strength += 1
@@ -38,7 +38,7 @@ class Horse:
         if value in ['str', 'strength', 'both']:
             self.strength += amount
             if self.strength >= 132:
-                if self.wins > 0:
+                if self.wins:
                     self.star('Rock')
                 if self.speed < 111:
                     self.speed += 1
