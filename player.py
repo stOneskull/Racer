@@ -1,6 +1,9 @@
 class U:
     '''the player'''
 
+    def __repr__(self):
+        return self.name
+
     def __init__(self, playername):
 
         self.name = playername
