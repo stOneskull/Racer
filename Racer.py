@@ -1373,8 +1373,6 @@ def get(loadfile):
             data = pickle.load(jar)
         return data
     except:
-        print('No load file to load..')
-        sh(3)
         return 'nofile'
 
 
@@ -1399,12 +1397,12 @@ def load():
 
     if see == 'nofile':
         print('no file to load!')
-        sh(3)
+        pause(3)
         try:
             if u: return options
         except:
             print('starting new game..')
-            sh(3)
+            pause(3)
             return main(thegame='new')
 
     u = see
