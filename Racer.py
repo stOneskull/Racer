@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-__version__ = '0.1.23'
+__version__ = '0.1.23.1'
 
 '''Racer
 (c)2017->
@@ -19,12 +19,12 @@ Heart = True
 
 
 def clr(lines=99):
-    '''print amount of lines, default is 99 to clear console'''
+    '''print new lines'''
     print('\n' * lines)
 
 
 def sh(secs):
-    '''pause in seconds multiplied by wait attribute'''
+    '''pause by wait'''
     pause(secs * u.wait)
 
 
@@ -216,7 +216,7 @@ def odds(horse):
     theodds *= changer
 
     horse.odds = theodds
-    horse.oddstring = str(format(round(theodds, 1), '05.2f'))
+    horse.oddstring = f'{round(theodds, 1):05.2f}'
 
 
 def startnhalf():
@@ -377,11 +377,9 @@ def raceroutine(segments):
     '''take in race legs and direct each leg accordingly'''
 
     for segment in range(segments):
-        u.seggy = segment + 1  # zero indexed so add one, call it seggy
+        u.seggy = segment + 1
 
         clr()
-
-    # segger is the text of the segment
 
         if u.seggy == segments:
             segger = 'last'
@@ -472,7 +470,6 @@ def updown(diffsdict):
         elif v < -2: m = 'slips'
         else: m = 'moves'
 
-        # zero indexed so add one
         e = u.possy.index(h) + 1
         if e < 4:
             if e == 1: r = 'into first'
@@ -521,7 +518,7 @@ def race():
 
     for lane, horse in u.lanes.items():
 
-        print('\n  ', horse, 'enters stall', lane)
+        print(f'\n  {horse} enters stall {lane}')
         sh(1.5)
 
         if (u.horses_per - lane < 2 and horse.weakness == 4) \
@@ -607,8 +604,8 @@ def track():
         print('    weather:', u.weather['feel'], '&', u.weather['sky'])
         flag('track')  # track now closes until bet made
         laps = 'lap' if u.laps == 1 else 'laps'
-        print('\ntoday,', u.today.lower() +
-              ': there will be', u.laps, laps, 'of the track for the race')
+        print(f'\ntoday, {u.today.lower()}:')
+        print(f'there will be {u.laps} {laps} of the track for the race')
         return menu
 
     race()
@@ -704,7 +701,7 @@ def clue():
 
     if d(1, 3) != 3:
         silver = input('\nSolve the clue? y/n -> ')
-        if 'y' in silver.lower():
+        if 'n' not in silver.lower():
             if d(1, 3) == 1:
                 u.clued = 1
                 u.clues += 1
@@ -856,10 +853,8 @@ def bet(lane):
 
     while True:
 
-        print('\nYou are betting on %s' % horse.name)
-
+        print('\nYou are betting on %s' % horse)
         print('Enter 0 to cancel bet')
-
         saymoney()
 
         try:
@@ -915,7 +910,7 @@ def bookie():
         sh(0.23)
 
         for lano, horsey in u.lanes.items():
-            print(f'   |  {lano}  {horsey.name}')
+            print(f'   |  {lano}  {horsey}')
 
         lane = 23
 
@@ -973,16 +968,16 @@ def bookie():
 def sumting(something):
     '''lidda bidda sumpin sumpin'''
 
-    sh(1.5); print('\n    You have come a long way,', u.name); sh(2)
+    sh(1.5); print('\n    You have come a long way,', u); sh(2)
     print('\nIt is me, May Lee'); sh(1.5)
-    print('Come with me,', u.name); sh(1.5)
+    print('Come with me,', u); sh(1.5)
     print('\n     I will show you'); sh(2)
     gong = input('\n(will you go with May Lee?)\n')
     if 'n' in gong.lower():
         return something
 
     something = ('\nMuch good. Time for prepare.' +
-                 '\n   Look out for me, ' + u.name +
+                 '\n   Look out for me, ' + u +
                  '. I will come for you soon. \n\n' +
                  'You will need about $2350\n  ')
     flag('garden')
@@ -1070,8 +1065,7 @@ def menu():
         if (path in u.doors
                 and u.doors[path] in u.flags
                 and u.flags[u.doors[path]] == 0):
-            go = eval(u.doors[path])
-            return go
+            return eval(u.doors[path])
 
 
 def gameover():
@@ -1324,8 +1318,8 @@ def setup():
         u.D[horse.number] = horse  # instance into dictionary
 
         print('Importing..')
-        print(format(horse.number, '02d'), horse.name)
-        print('star:', horse.rank)
+        print(f'{horse.number:02d} {horse}')
+        print(f'star: {horse.rank}')
         print('---------------------------------')
 
         if horse.rank == 1:
@@ -1352,11 +1346,11 @@ def save():
 
     u.loadnum += 1
 
-    saving = u.name + str(u.loadnum) + '.save'
+    saving = f'{u.name}{u.loadnum}.save'
 
     put(u, saving)
 
-    print(f'\nGame saved, {u.name}..')
+    print(f'\nGame saved, {u}..')
     sh(0.7)
     print(f'\nYour Load number is: {u.loadnum}')
     sh(5)
@@ -1418,7 +1412,7 @@ def load():
     # load success
 
     Horse.counter = len(u.gamehorses)
-    loaded = f'Loaded.. Welcome back {u.name}.'
+    loaded = f'Loaded.. Welcome back {u}.'
     sh(1.5); print(loaded); sh(3)
 
     clr()
@@ -1427,8 +1421,8 @@ def load():
     for horse in u.D.values():
 
         print('Importing..')
-        print(format(horse.number, '02d'), horse.name)
-        print('star:', horse.rank)
+        print(f'{horse.number:02d} {horse}')
+        print(f'star: {horse.rank}')
         print('---------------------------------')
         sh(0.23)
 
@@ -1448,13 +1442,20 @@ def main(thegame='load'):
 
     while thegame != 'new':
 
-        print('\n    1 - New game\n    2 - Load')
+        print('''
+              
+              1 - New game
+              2 - Load
+
+              q - quit
+
+              ''')
         hmm = input('\n? ')
+        if hmm == 'q': return quit
         if hmm == '2': return load
         if hmm == '1': thegame = 'new'
 
     while True:
-
         you = input('Enter your name: ').strip()
         if not you: continue
         # hi
@@ -1463,7 +1464,7 @@ def main(thegame='load'):
 
 
 def wonderwall(egg):
-    '''the humpty dumpty loop trick'''
+    '''humpty dumpty loop'''
 
     while Heart is True:
         egg = egg()
