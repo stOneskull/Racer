@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-__version__ = '0.1.23.1'
+__version__ = '0.1.23.2'
 
 '''Racer
 (c)2017->
@@ -712,7 +712,7 @@ def clue():
     sh(2)
 
     if someone == 'a person':
-        sayhi(they, u)
+        sayhi(they)
     else:
         sh(2)
         print(f'''\n     {they} asks: 
@@ -731,6 +731,10 @@ def clue():
                 print('            no. not this time..')
             sh(2)
 
+    flag('options')
+    flag('garden')
+    return something
+
 
 def gotcha():
     u.clued = 1
@@ -742,7 +746,7 @@ def gotcha():
     return "\nCool bananas!\n"
 
 
-def sayhi(they, u):
+def sayhi(they):
     print(f"    {they} says: I have a clue for you")
     sh(2)
     print(f'\n              My name is {u.someone}')
