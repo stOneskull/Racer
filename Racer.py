@@ -277,6 +277,19 @@ def startnhalf():
 
     sh(2.5); clr(3)
 
+def laneresistance(horse, lane):
+    return(
+        u.horses_per - lane < 2 and horse.weakness == 4 or
+        lane < 3 and horse.weakness == 3
+    )
+
+
+def veryhot(horse):
+    return horse.weakness == 1 and u.weather['temp'] > 33
+
+def hot(horse):
+    return horse.weakness == 1 and u.weather['temp'] > 26
+
 
 def shuffle():
     '''monitor conditions through race'''
@@ -289,18 +302,17 @@ def shuffle():
         strength = horse.strength
         speed = horse.speed
 
-        if (u.horses_per - lane < 2 and horse.weakness == 4) \
-               or (lane < 3 and horse.weakness == 3):
+        if laneresistance(horse, lane):
             if d(0, 1) == 1:
                 horse.rise('speed', 0 - d(2, 4))
             else: horse.rise('speed', d(-2, 0))
 
-        elif horse.weakness == 1 and u.weather['temp'] > 33:
+        elif veryhot(horse):
             if d(0, 1) == 1:
                 horse.rise('str', 0 - d(2, 4))
             else: horse.rise('both', d(-2, 0))
 
-        elif horse.weakness == 1 and u.weather['temp'] > 26:
+        elif hot(horse):
             if d(0, 1) == 1:
                 horse.rise('both', 0 - d(1, 2))
             else: horse.rise('both', d(0, 1))
@@ -501,6 +513,26 @@ def updown(diffsdict):
         sh(1.4)
 
 
+def hothorse(horse):
+    horse.rise('both', -3)
+
+    if d(0, 1) == 1:
+        print('        There is a little delay..',
+                horse, 'looks a little weak..')
+        horse.rise('both', -2)
+        sh(d(3, 5))
+
+
+def resistance(horse):
+    horse.rise('speed', -3)
+
+    if d(0, 1) == 1:
+        print('        There is a little delay as',
+                horse, 'resists')
+        horse.rise('both', -2)
+        sh(d(3, 5))
+
+
 def race():
     '''at the track and the race is about to begin'''
 
@@ -531,22 +563,11 @@ def race():
 
         if (u.horses_per - lane < 2 and horse.weakness == 4) \
            or (lane < 3 and horse.weakness == 3):
-            horse.rise('speed', -3)
-
-            if d(0, 1) == 1:
-                print('        There is a little delay as',
-                      horse, 'resists')
-                horse.rise('both', -2)
-                sh(d(3, 5))
+            resistance(horse)
 
         elif horse.weakness == 1 and u.weather['temp'] > 26:
-            horse.rise('both', -3)
+            hothorse(horse)
 
-            if d(0, 1) == 1:
-                print('        There is a little delay..',
-                      horse, 'looks a little weak..')
-                horse.rise('both', -2)
-                sh(d(3, 5))
 
         elif horse.weakness == 2 and u.weather['dirt'] == 'wet':
             horse.rise('str', -3)
