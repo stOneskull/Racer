@@ -100,6 +100,47 @@ def switch():
         break
 
     u.possy[m], u.possy[a] = u.possy[a], u.possy[m]
+def startrace(horses):
+    sortpossy = {}
+    u.possy = []
+
+    for horse in horses:
+
+        oddmeter = horse.odds
+
+        while oddmeter in sortpossy:
+            oddmeter += 0.001
+
+        sortpossy[oddmeter] = horse
+
+    oddslist = sorted(sortpossy)
+
+    u.possy.extend(sortpossy[oddz] for oddz in oddslist)
+
+    switch()
+    switch()
+    switch()
+
+    sh(2)
+    clr(3)
+
+    print()
+    sh(1.5)
+    print()
+    print('A', u.weather['feel'], u.today, 'afternoon at the races!')
+    sh(2)
+    clr()
+    sh(1.5)
+    print('\n\n     The horses shake their legs..')
+    sh(1.5)
+    print('\n         and begin their equine dance')
+    sh(1.5)
+    print('\n             across the', u.weather['dirt'], 'track..\n\n')
+
+    sh(2.3)
+    clr()
+    print('Out of the gate..')
+    sh(2.3)
 
 
 def possy(horses, halt=0):
@@ -108,40 +149,7 @@ def possy(horses, halt=0):
 
     if u.seggy == 1:  #  if start of race
 
-        sortpossy = {}
-        u.possy = []
-
-        for horse in horses:
-
-            oddmeter = horse.odds
-
-            while oddmeter in sortpossy:
-                oddmeter += 0.001
-
-            sortpossy[oddmeter] = horse
-
-        oddslist = sorted(sortpossy)
-
-        u.possy.extend(sortpossy[oddz] for oddz in oddslist)
-
-        switch(); switch(); switch()
-
-        sh(2); clr(3)
-
-        print(); sh(1.5); print()
-        print('A', u.weather['feel'], u.today, 'afternoon at the races!')
-        sh(2); clr(); sh(1.5)
-        print('\n\n     The horses shake their legs..')
-        sh(1.5)
-        print('\n         and begin their equine dance')
-        sh(1.5)
-        print('\n             across the', u.weather['dirt'], 'track..\n\n')
-
-        sh(2.3)
-        clr()
-        print('Out of the gate..')
-        sh(2.3)
-
+        startrace(horses)
     else:
         shuffler = shuffle()
 
@@ -669,7 +677,6 @@ def clue():
         flag('options')
         flag('garden')
         return something
-
     elif u.met == 0:
         meeter = choice(u.meetnext)
         u.meetnext.remove(meeter)
@@ -684,12 +691,7 @@ def clue():
     sh(2)
 
     if someone == 'a person':
-        print(f"    {they} says: I have a clue for you")
-        sh(2)
-        print(f'\n              My name is {u.someone}')
-        sh(1.5)
-        print("            Come see me when you're ready")
-        u.bag['clues'] = 1
+        sayhi(they, u)
     else:
         sh(2)
         print(f'''\n     {they} asks: 
@@ -703,22 +705,29 @@ def clue():
         silver = input('\nSolve the clue? y/n -> ')
         if 'n' not in silver.lower():
             if d(1, 3) == 1:
-                u.clued = 1
-                u.clues += 1
-                u.met = 0
-                u.bag['clues'] = 0
-                something = "\nCool bananas!\n"
-                sh(1)
-                print(clues(u.clues))
-                sh(2)
+                something = gotcha()
             else:
                 print('            no. not this time..')
-                sh(2)
+            sh(2)
 
-    flag('options')
-    flag('garden')
 
-    return something
+def gotcha():
+    u.clued = 1
+    u.clues += 1
+    u.met = 0
+    u.bag['clues'] = 0
+    sh(1)
+    print(clues(u.clues))
+    return "\nCool bananas!\n"
+
+
+def sayhi(they, u):
+    print(f"    {they} says: I have a clue for you")
+    sh(2)
+    print(f'\n              My name is {u.someone}')
+    sh(1.5)
+    print("            Come see me when you're ready")
+    u.bag['clues'] = 1
 
 
 def garden():
@@ -859,7 +868,7 @@ def bet(lane):
 
         try:
             thebet = int(input('\nHow much to bet? '))
-        except:
+        except Exception:
             print('''
                 We cannot accept cents for bets.
                 We apologise for the inconvenience.
@@ -894,74 +903,81 @@ def bet(lane):
         return menu
 
 
+def checkticket():
+    flag('bookie')
+
+    print('\nYour ticket:', u.ticket)
+    winner = u.possy[0]
+    winner.wins += 1
+    print('\nWinner:', winner)
+
+    if winner in u.ticket:
+        uwin(winner)
+    else: sh(2); print('\nBetter luck tomorrow..')
+
+    u.bag['ticket'] = 0
+
+
+def uwin(winner):
+    sh(5)
+    print('\n !! ! !! ! Winner ! !! ! !!')
+    sh(3)
+    saymoney()
+    sh(3)
+    a = u.ticket[winner] * winner.odds
+    winnings = round(a, 2)
+    u.money += winnings
+    print(f'\nYou receive ${winnings:0.2f}!')
+    sh(3)
+    saymoney()
+
+
+def bookiebet():
+    print('\nInside the small tent you tap start on the betting terminal..')
+
+    saymoney()
+
+    print('\n  \\|  Enter lane number to bet on horse  \n')
+
+    sh(0.23)
+
+    for lano, horsey in u.lanes.items():
+        print(f'   |  {lano}  {horsey}')
+
+    lane = 23
+
+    while lane - 1 not in range(u.horses_per) and lane != 0:
+        try:
+            lane = int(input("\ntype 0 to close betting\n"))
+            if u.lanes[lane] in u.ticket:
+                print('\n    You have bet on that horse already')
+                print('  Choose another one..\n')
+                print(u.lanes)
+                lane = 23
+        except Exception:
+            continue
+
+    if lane != 0:
+        return bet(lane)
+
+    if not u.ticket: return menu
+
+    print(u.ticket)
+
+    betdone()
+
+    return menu
+
+
 def bookie():
     '''betting before race, check ticket after race'''
 
     clr()
 
     if u.betyet == 0:
-
-        print('\nInside the small tent you tap start on the betting terminal..')
-
-        saymoney()
-
-        print('\n  \\|  Enter lane number to bet on horse  \n')
-
-        sh(0.23)
-
-        for lano, horsey in u.lanes.items():
-            print(f'   |  {lano}  {horsey}')
-
-        lane = 23
-
-        while lane - 1 not in range(u.horses_per):
-            if lane == 0: break
-            try:
-                lane = int(input("\ntype 0 to close betting\n"))
-                if u.lanes[lane] in u.ticket:
-                    print('\n    You have bet on that horse already')
-                    print('  Choose another one..\n')
-                    print(u.lanes)
-                    lane = 23
-            except: continue
-
-        if lane != 0:
-            return bet(lane)
-
-        if not u.ticket: return menu
-
-        print(u.ticket)
-
-        betdone()
-
-        return menu
-
+        return bookiebet()
     else:
-
-        flag('bookie')
-
-        print('\nYour ticket:', u.ticket)
-        winner = u.possy[0]
-        winner.wins += 1
-        print('\nWinner:', winner)
-
-        if winner in u.ticket:
-            sh(5)
-            print('\n !! ! !! ! Winner ! !! ! !!')
-            sh(3)
-            saymoney()
-            sh(3)
-            a = u.ticket[winner] * winner.odds
-            winnings = round(a, 2)
-            u.money += winnings
-            print(f'\nYou receive ${winnings:0.2f}!')
-            sh(3)
-            saymoney()
-
-        else: sh(2); print('\nBetter luck tomorrow..')
-
-        u.bag['ticket'] = 0
-
+        checkticket()
     return menu
 
 
@@ -1372,7 +1388,7 @@ def get(loadfile):
         with open(loadfile, 'rb') as jar:
             data = pickle.load(jar)
         return data
-    except:
+    except Exception:
         return 'nofile'
 
 
@@ -1387,7 +1403,7 @@ def load():
 
     try:
         if u: name = u.name
-    except:
+    except Exception:
         name = input('\nEnter your name\n').strip()
 
     loadnum = input('\nEnter your load number\n')
@@ -1400,7 +1416,7 @@ def load():
         pause(3)
         try:
             if u: return options
-        except:
+        except Exception:
             print('starting new game..')
             pause(3)
             return main(thegame='new')
@@ -1411,7 +1427,9 @@ def load():
 
     Horse.counter = len(u.gamehorses)
     loaded = f'Loaded.. Welcome back {u}.'
-    sh(1.5); print(loaded); sh(3)
+    sh(1.5)
+    print(loaded)
+    sh(3)
 
     clr()
     sh(1)
