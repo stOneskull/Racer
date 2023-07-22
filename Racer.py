@@ -585,7 +585,7 @@ def waitclearsaywait(say, wait=0):
     print(say)
     sh(wait)
 
-    
+
 def race():
     '''at the track and the race is about to begin'''
 
@@ -661,7 +661,7 @@ def race():
 def sleep():
     '''zzZ'''
 
-    sh(2); print('\n sleep time..\n'); sh(1)
+    shpsh(2, '\n sleep time..\n', 1)
     for _z in range(d(6, 9)):
         for _zz in range(d(2, 7)):
             print('.', end="")
@@ -675,6 +675,17 @@ def sleep():
     return game
 
 
+def trackdetails():
+    print('track details..\n')
+    print('    track:', u.weather['dirt'])
+    print('    weather:', u.weather['feel'], '&', u.weather['sky'])
+    flag('track')  # track now closes until bet made
+    laps = 'lap' if u.laps == 1 else 'laps'
+    print(f'\ntoday, {u.today.lower()}:')
+    print(f'there will be {u.laps} {laps} of the track for the race')
+    return menu
+
+
 def track():
     '''if no bets: show info about track
         otherwise: race()!'''
@@ -682,18 +693,13 @@ def track():
     clr()
 
     if u.betyet == 0:
-        print('track details..\n')
-        print('    track:', u.weather['dirt'])
-        print('    weather:', u.weather['feel'], '&', u.weather['sky'])
-        flag('track')  # track now closes until bet made
-        laps = 'lap' if u.laps == 1 else 'laps'
-        print(f'\ntoday, {u.today.lower()}:')
-        print(f'there will be {u.laps} {laps} of the track for the race')
-        return menu
-
+        return trackdetails
+    
     race()
 
-    sh(2); print('\n amazing race...'); sh(3)
+    sh(2)
+    print('\n amazing race...')
+    sh(3)
     u.flags['bookie'] = 0  # bookie opens again
     flag('track')  # after race, track closes access for the day
 
