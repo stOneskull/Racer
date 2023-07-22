@@ -697,9 +697,8 @@ def track():
     
     race()
 
-    sh(2)
-    print('\n amazing race...')
-    sh(3)
+    shpsh(2, '\n amazing race...', 3)
+
     u.flags['bookie'] = 0  # bookie opens again
     flag('track')  # after race, track closes access for the day
 
@@ -715,6 +714,12 @@ def clues(five):
     wordtoyomama = 'word'
     spy = get(word)
     return spy[five]
+
+
+def endings(something):
+    flag('options')
+    flag('garden')
+    return something
 
 
 def clue():
@@ -755,9 +760,7 @@ def clue():
     if not u.meetnext and u.met == 0:  # no more unmet peeps, all done
         u.clued = 2
         u.met = 2
-        flag('options')
-        flag('garden')
-        return something
+        return endings(something)
     elif u.met == 0:
         meeter = choice(u.meetnext)
         u.meetnext.remove(meeter)
@@ -791,9 +794,7 @@ def clue():
                 print('            no. not this time..')
             sh(2)
 
-    flag('options')
-    flag('garden')
-    return something
+    return endings(something)
 
 
 def gotcha():
@@ -813,6 +814,35 @@ def sayhi(they):
     sh(1.5)
     print("            Come see me when you're ready")
     u.bag['clues'] = 1
+
+
+def getguide():
+    sh(2.3)
+    print('''
+
+    You find today's newspaper sitting on a wooden bench.
+        The story of the criminal underworld war continues...
+
+        There is a racing guide in the paper. You take it.
+
+        ''')
+
+    u.bag['guide'] = 1
+
+    u.flags['guide'] = 0  # guide available
+    u.flags['bookie'] = 0  # bookie open
+    sh(2)
+
+
+def findmoney():
+    sh(1.5)
+    lucky = d(1, 10)
+    if lucky == 1:
+        print('    You find a dollar.')
+    else:
+        print('    You find', lucky, 'dollars.')
+    u.money += lucky
+    sh(1.5); saymoney(); sh(1.5)
 
 
 def garden():
@@ -835,34 +865,9 @@ def garden():
     sh(2.3)
 
     if u.money < 4 and u.betyet == 0:
-        sh(1.5)
-        lucky = d(1, 10)
-        if lucky == 1:
-            print('    You find a dollar.')
-        else:
-            print('    You find', lucky, 'dollars.')
-        u.money += lucky
-        sh(1.5)
-        saymoney()
-        sh(1.5)
-
+        findmoney()
     if u.betyet == 0 and u.flags['guide'] == 1 and u.bye != 1:
-        sh(2.3)
-        print('''
-
-    You find today's newspaper sitting on a wooden bench.
-        The story of the criminal underworld war continues...
-
-        There is a racing guide in the paper. You take it.
-
-        ''')
-
-        u.bag['guide'] = 1
-
-        u.flags['guide'] = 0  # guide available
-        u.flags['bookie'] = 0  # bookie open
-        sh(2)
-
+        getguide()
     if u.met == 2 and u.bye != 1:
         if u.nexts > 2:
             something = clue()
@@ -886,6 +891,9 @@ def garden():
         sh(1.5); print(something); sh(3)
 
     return bye if u.bye == 1 else menu
+
+
+
 
 
 def guide():
@@ -1069,10 +1077,10 @@ def bookie():
 def sumting(something):
     '''lidda bidda sumpin sumpin'''
 
-    sh(1.5); print('\n    You have come a long way,', u); sh(2)
-    print('\nIt is me, May Lee'); sh(1.5)
-    print('Come with me,', u); sh(1.5)
-    print('\n     I will show you'); sh(2)
+    shpsh(1.5, f'\n    You have come a long way, {u}', 2)
+    shpsh(0, '\nIt is me, May Lee', 1.5)
+    shpsh(0, f'Come with me, {u}', 1.5)
+    shpsh(0, '\n     I will show you', 2)
     gong = input('\n(will you go with May Lee?)\n')
     if 'n' in gong.lower():
         return something
@@ -1089,7 +1097,6 @@ def sumting(something):
 
 def bio(lane):
     '''individual entries in the guide showing horse info'''
-
     clr()
 
     horse = u.lanes[lane]
@@ -1323,14 +1330,14 @@ def broadcast():
     print("It's", u.weather['feel'], 'and',
           u.weather['sky'] + '.')
 
-    sh(1); print(); sh(1)
+    shpsh(1, '', 1)
 
     print('Newsy newsy newsy news...')
 
     racing()
     lanes()
 
-    sh(1); print(); sh(1)
+    shpsh(1, '', 1)
 
     tis = input("Very interesting, wouldn't you say?\n\n")
     print('\nindeed..', tis)
