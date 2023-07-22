@@ -28,6 +28,18 @@ def sh(secs):
     pause(secs * u.wait)
 
 
+def pshp(secs):
+    print()
+    sh(secs)
+    print()
+
+
+def shpsh(secsa, text, secsb):
+    sh(secsa)
+    print(text)
+    sh(secsb)
+
+
 def nature():
     '''temperature and moisture random'''
 
@@ -184,14 +196,16 @@ def diffs(oldpossy):
 
     updown(diffsdict)
 
-    # after commenting changes then display all current positions
-
-    print(); sh(1.5); print()
+    pshp(1.5)
     for position, horsey in enumerate(u.possy):
         print(f'{position + 1}: {horsey}', end=" ")
         print(' <-- your horse') if horsey in u.ticket else print()
-    sh(1); print()
-    print(); sh(2.3); print()
+    sh(1)
+    print()
+    pshp(2.3)
+
+
+
 
 
 def bye():
@@ -200,14 +214,12 @@ def bye():
     input('Ready?\n')
     clr()
     u.wait = 1
-    print('\n you think about your life in the gutter..'); sh(2)
-    sh(1); print('\n  and these last', u.day, 'days of the groundhog grind..')
-    sh(2); print('\n it\'s time to move on..'); sh(3)
-    sh(1); print('\n   and be..'); sh(3)
+    shpsh(0, '\n you think about your life in the gutter..', 2)
+    shpsh(1, f'\n  and these last {u.day} days of the groundhog grind..', 0)
+    shpsh(2, "\n it's time to move on..", 3)
+    shpsh(1, '\n   and be..', 3)
     print('\n\n              !0! ! !Happy Happy Ever After! ! !0!')
-    sh(5)
-    print('\n\namazing game...')
-    sh(5)
+    shpsh(5, '\n\namazing game...', 5)
     say = input('\n               howzat?\n        ')
     print('\n\n  indeed..', say)
     sh(2)
@@ -275,12 +287,12 @@ def startnhalf():
                 f'   and in last.. it\'s {horsey}',
                 f'   with {horsey} in the rear',
             ]))
-
-        print(choice([
-            f' followed by {horsey}',
-            f' and then {horsey}',
-            f" then it's {horsey}",
-        ]))
+        else:
+            print(choice([
+                f' followed by {horsey}',
+                f' and then {horsey}',
+                f" then it's {horsey}",
+            ]))
 
         sh(1.8)
 
@@ -401,7 +413,7 @@ def otherhorsechecks(horse):
 
         if u.seggy > 6 and horse.strength > 75 and horse.speed < 75:
             horse.speed += horse.speed * 0.023
-            
+
 def shuffle():
     '''monitor conditions through race'''
 
@@ -467,30 +479,23 @@ def raceroutine(segments):
 
         if u.seggy <= segments:
             print(f'\n    Into the {segger} turn..')
-            sh(1)
-            print(' ~-------------------------~\n')
-            sh(2)
+            shpsh(1, ' ~-------------------------~\n', 2)
 
         if u.seggy == segments - 1:  # if second last segment
             clr()
             possy(u.possy)
 
         if segger == 'last':
-            possy(u.possy, halt=1)
-            clr()
-            print('\nOh ho ho..')
-            print('  The final leg..')
-            print(); sh(2)
-            print(f'\nIn front is {u.possy[0]}')
-            sh(1)
-            print(f"\n     In second it's {u.possy[1]}")
-            sh(1)
-            print(f'\n          In third is {u.possy[2]}')
-            sh(2.3)
-            possy(u.possy, halt=1)
+            _extracted_from_raceroutine_41('\nOh ho ho..')
 
-            clr()
-            print('\nComing in toward the finish line..')
+            print('  The final leg..')
+            print()
+            shpsh(2, f'\nIn front is {u.possy[0]}', 1)
+            print(f"\n     In second it's {u.possy[1]}")
+            shpsh(1, f'\n          In third is {u.possy[2]}', 2.3)
+
+            _extracted_from_raceroutine_41('\nComing in toward the finish line..')
+
             sh(1.5)
             print(f"\n   it's {u.possy[0]}..")
             sh(1.2)
@@ -517,6 +522,13 @@ def raceroutine(segments):
 
         clr(2)
         sh(1.5)
+
+
+# TODO Rename this here and in `raceroutine`
+def _extracted_from_raceroutine_41(arg1):
+    possy(u.possy, halt=1)
+    clr()
+    print(arg1)
 
 
 def updown(diffsdict):
