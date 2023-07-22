@@ -382,21 +382,8 @@ def checkhorsestrength(horse, lane):
             horse.rise('both', 1)
         else: horse.rise('str', 1)
 
-
-def shuffle():
-    '''monitor conditions through race'''
-
-    shuffler = {}
-
-    for lane, horse in u.lanes.items():
-
-        points = horse.trackpoints * 0.23
-        strength = horse.strength
-        speed = horse.speed
-
-        checkhorseweakness(horse, lane)
-        checkhorsestrength(horse, lane)
-
+def otherhorsechecks(horse):
+    
         if u.seggy > 5 and horse.strength > 90:
             horse.rise('speed', 1)
             horse.rise('str', -1)
@@ -414,6 +401,23 @@ def shuffle():
 
         if u.seggy > 6 and horse.strength > 75 and horse.speed < 75:
             horse.speed += horse.speed * 0.023
+            
+def shuffle():
+    '''monitor conditions through race'''
+
+    shuffler = {}
+
+    for lane, horse in u.lanes.items():
+
+        points = horse.trackpoints * 0.23
+        strength = horse.strength
+        speed = horse.speed
+
+        checkhorseweakness(horse, lane)
+        checkhorsestrength(horse, lane)
+
+        otherhorsechecks(horse)
+        
 
         horse.strength += horse.strength * 0.023
 
