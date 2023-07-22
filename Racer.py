@@ -330,6 +330,59 @@ def dampstrength(horse):
 def muddystrength(horse):
     return horse.secret == 2 and u.weather['dirt'] == 'muddy'
 
+def checkhorseweakness(horse, lane):
+    if laneresistance(horse, lane):
+        if d(0, 1) == 1:
+            horse.rise('speed', 0 - d(2, 4))
+        else: horse.rise('speed', d(-2, 0))
+
+    elif veryhot(horse):
+        if d(0, 1) == 1:
+            horse.rise('str', 0 - d(2, 4))
+        else: horse.rise('both', d(-2, 0))
+
+    elif hot(horse):
+        if d(0, 1) == 1:
+            horse.rise('both', 0 - d(1, 2))
+        else: horse.rise('both', d(0, 1))
+
+    elif damptrack(horse):
+        if d(0, 1) == 1:
+            horse.rise('speed', 0 - d(1, 2))
+        else: horse.rise('str', d(0, 1))
+
+    elif muddytrack(horse):
+        if d(0, 1) == 1:
+            horse.rise('speed', 0 - d(2, 3))
+        else: horse.rise('str', d(0, 1))
+
+def checkhorsestrength(horse, lane):
+    if lanestrength(horse, lane):
+        if d(0, 1) == 1:
+            horse.rise('speed', d(0, 2))
+        else: horse.rise('speed', d(0, 1))
+
+    elif hotstrength(horse):
+        if d(0, 1) == 1:
+            horse.rise('both', d(0, 1))
+        else: horse.rise('str', d(0, 2))
+
+    elif warmstrength(horse):
+        if d(0, 1) == 1:
+            horse.rise('str', d(0, 1))
+        else: horse.rise('both', d(0, 1))
+
+    elif dampstrength(horse):
+        if d(0, 1) == 1:
+            horse.rise('str', 1)
+        else: horse.rise('speed', 1)
+
+    elif muddystrength(horse):
+        if d(0, 1) == 1:
+            horse.rise('both', 1)
+        else: horse.rise('str', 1)
+
+
 def shuffle():
     '''monitor conditions through race'''
 
@@ -341,59 +394,8 @@ def shuffle():
         strength = horse.strength
         speed = horse.speed
 
-        if laneresistance(horse, lane):
-            if d(0, 1) == 1:
-                horse.rise('speed', 0 - d(2, 4))
-            else: horse.rise('speed', d(-2, 0))
-
-        elif veryhot(horse):
-            if d(0, 1) == 1:
-                horse.rise('str', 0 - d(2, 4))
-            else: horse.rise('both', d(-2, 0))
-
-        elif hot(horse):
-            if d(0, 1) == 1:
-                horse.rise('both', 0 - d(1, 2))
-            else: horse.rise('both', d(0, 1))
-
-        elif damptrack(horse):
-            if d(0, 1) == 1:
-                horse.rise('speed', 0 - d(1, 2))
-            else: horse.rise('str', d(0, 1))
-
-        elif muddytrack(horse):
-            if d(0, 1) == 1:
-                horse.rise('speed', 0 - d(2, 3))
-            else: horse.rise('str', d(0, 1))
-
-# weaknesses ^ ---------- ^
-
-        if lanestrength(horse, lane):
-            if d(0, 1) == 1:
-                horse.rise('speed', d(0, 2))
-            else: horse.rise('speed', d(0, 1))
-
-        elif hotstrength(horse):
-            if d(0, 1) == 1:
-                horse.rise('both', d(0, 1))
-            else: horse.rise('str', d(0, 2))
-
-        elif warmstrength(horse):
-            if d(0, 1) == 1:
-                horse.rise('str', d(0, 1))
-            else: horse.rise('both', d(0, 1))
-
-        elif dampstrength(horse):
-            if d(0, 1) == 1:
-                horse.rise('str', 1)
-            else: horse.rise('speed', 1)
-
-        elif muddystrength(horse):
-            if d(0, 1) == 1:
-                horse.rise('both', 1)
-            else: horse.rise('str', 1)
-
-# strengths ^ ------------ ^
+        checkhorseweakness(horse, lane)
+        checkhorsestrength(horse, lane)
 
         if u.seggy > 5 and horse.strength > 90:
             horse.rise('speed', 1)
