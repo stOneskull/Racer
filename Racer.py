@@ -446,6 +446,12 @@ def shuffle():
     return shuffler
 
 
+def shufflepossy(say):
+    possy(u.possy, halt=1)
+    clr()
+    print(say)
+
+
 def raceroutine(segments):
     '''take in race legs and direct each leg accordingly'''
 
@@ -486,7 +492,7 @@ def raceroutine(segments):
             possy(u.possy)
 
         if segger == 'last':
-            _extracted_from_raceroutine_41('\nOh ho ho..')
+            shufflepossy('\nOh ho ho..')
 
             print('  The final leg..')
             print()
@@ -494,20 +500,14 @@ def raceroutine(segments):
             print(f"\n     In second it's {u.possy[1]}")
             shpsh(1, f'\n          In third is {u.possy[2]}', 2.3)
 
-            _extracted_from_raceroutine_41('\nComing in toward the finish line..')
+            shufflepossy('\nComing in toward the finish line..')
 
-            sh(1.5)
-            print(f"\n   it's {u.possy[0]}..")
-            sh(1.2)
+            shpsh(1.5, f"\n   it's {u.possy[0]}..", 1.2)
             print(f"\n         just in front of {u.possy[1]}..")
-            sh(1.2)
-            print(f'\n     with {u.possy[2]} just behind them')
-            sh(3)
+            shpsh(1.2, f'\n     with {u.possy[2]} just behind them', 3)
             clr()
             print('\nThe horses pass the post..')
-            sh(1)
-            print('\nIt\'s all over..')
-            sh(2)
+            shpsh(1, "\nIt's all over..", 2)
             possy(u.possy, halt=1)
 
             for position, horsey in enumerate(u.possy):
@@ -522,13 +522,6 @@ def raceroutine(segments):
 
         clr(2)
         sh(1.5)
-
-
-# TODO Rename this here and in `raceroutine`
-def _extracted_from_raceroutine_41(arg1):
-    possy(u.possy, halt=1)
-    clr()
-    print(arg1)
 
 
 def updown(diffsdict):
@@ -586,6 +579,13 @@ def resistance(horse):
         sh(d(3, 5))
 
 
+def waitclearsaywait(say, wait=0):
+    sh(3)
+    clr()
+    print(say)
+    sh(wait)
+
+    
 def race():
     '''at the track and the race is about to begin'''
 
@@ -631,30 +631,31 @@ def race():
                 horse.rise('both', -2)
                 sh(d(3, 5))
 
-    sh(3)
-    clr()
-    print('''
+    waitclearsaywait(
+        '''
 
                 The horses are in the blocks..
 
                 We're awaiting the starting gun..
 
-                ''')
-    sh(2)
-
+                ''',
+        2,
+    )
     for _ in range(d(5, 10)):
         print('.')
         sh(1)
 
-    clr(2); print('                        !! Honk !!'); clr(2)
-    sh(3)
-    clr()
-    print('\nThe stall gates open and the horses are off and racing!')
-    sh(3)
-
+    clr(2)
+    print('                        !! Honk !!')
+    clr(2)
+    waitclearsaywait(
+        '\nThe stall gates open and the horses are off and racing!', 3
+    )
     segments = u.laps * 4
 
     raceroutine(segments)
+
+
 
 
 def sleep():
