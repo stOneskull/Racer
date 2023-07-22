@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-__version__ = '0.1.23.2'
+__version__ = '0.1.23.4'
 
 '''Racer
 (c)2017->
@@ -65,7 +65,7 @@ def saymoney():
     '''prints out player wallet value'''
 
     u.money = round(u.money, 2)
-    print('\nYou have $' + str(format(u.money, '0.2f')))
+    print(f'\nYou have ${u.money:0.2f}')
 
 
 def flag(theflag, hide=1):
@@ -100,11 +100,13 @@ def switch():
         break
 
     u.possy[m], u.possy[a] = u.possy[a], u.possy[m]
-def startrace(horses):
-    sortpossy = {}
-    u.possy = []
 
-    for horse in horses:
+
+def startpossy():
+    u.possy = []
+    sortpossy = {}
+
+    for horse in u.lanes.values():
 
         oddmeter = horse.odds
 
@@ -114,9 +116,11 @@ def startrace(horses):
         sortpossy[oddmeter] = horse
 
     oddslist = sorted(sortpossy)
-
     u.possy.extend(sortpossy[oddz] for oddz in oddslist)
 
+
+def startrace():
+    startpossy()
     switch()
     switch()
     switch()
@@ -148,8 +152,7 @@ def possy(horses, halt=0):
     halt 1 won't check diffs from last list'''
 
     if u.seggy == 1:  #  if start of race
-
-        startrace(horses)
+        startrace()
     else:
         shuffler = shuffle()
 
@@ -236,46 +239,53 @@ def startnhalf():
         print('\n..at the halfway mark now..')
         sh(2)
 
-    for i, start in enumerate(u.possy):
+    for position, horsey in enumerate(u.possy):
 
-        if i == 0:
-            slip = d(1, 3)
-            if slip == 1:
-                if u.seggy == 1:
-                    print(f'\n   {start} has a tops start..')
-                else:
-                    print(f'\n   {start} is in the lead..')
-            elif slip == 2:
-                if u.seggy == 1:
-                    print(f'\n   {start} has an ace start..')
-                else:
-                    print(f'\n   {start} is leading the pack..')
+        if position == 0:
+            if u.seggy == 1:
+                print(choice([
+                    f'\n   {horsey} has a tops start..',
+                    f'\n   {horsey} has an ace start..',
+                    f"\n  out in front it's {horsey}",
+                ]))
+
             else:
-                print(f"\n  out in front it's {start}")
+                print(choice([
+                    f'\n   {horsey} is in the lead..',
+                    f'\n   {horsey} is leading the pack..',
+                    f"\n  out in front it's {horsey}",
+                ]))
 
-        elif i == 1:
-            slop = d(1, 3)
-            if slop == 1: print('just followed by', start)
-            elif slop == 3: print('in second place it\'s', start)
-            else: print(start, 'is just behind in second')
+        elif position == 1:
+            print(choice([
+                f'just followed by {horsey}',
+                f"in second place it's {horsey}",
+                f'{horsey} is just behind in second',
+                ]))
 
-        elif i == 2:
-            if d(1, 2) == 2: print(start, 'in third')
-            else: print('  and', start)
+        elif position == 2:
+            print(choice([
+                f'{horsey} in third',
+                f'  and {horsey}',
+            ]))
 
-        elif start == u.possy[-1]:
-            slap = d(1, 3)
-            if slap == 1: print('   and it\'s', start, 'in last place')
-            elif slap == 3: print('   and in last.. it\'s', start)
-            else: print('   with', start, 'in the rear')
+        elif horsey == u.possy[-1]:
+            print(choice([
+                f'   and it\'s {horsey} in last place',
+                f'   and in last.. it\'s {horsey}',
+                f'   with {horsey} in the rear',
+            ]))
 
-        elif d(1, 2) == 1: print(' followed by', start)
-        elif d(1, 2) == 1: print(' and then', start)
-        else: print(' then it\'s', start)
+        print(choice([
+            f' followed by {horsey}',
+            f' and then {horsey}',
+            f" then it's {horsey}",
+        ]))
 
         sh(1.8)
 
     sh(2.5); clr(3)
+
 
 def laneresistance(horse, lane):
     return(
@@ -287,9 +297,38 @@ def laneresistance(horse, lane):
 def veryhot(horse):
     return horse.weakness == 1 and u.weather['temp'] > 33
 
+
 def hot(horse):
     return horse.weakness == 1 and u.weather['temp'] > 26
 
+
+def damptrack(horse):
+    return horse.weakness == 2 and u.weather['dirt'] == 'damp'
+
+
+def muddytrack(horse):
+    return horse.weakness == 2 and u.weather['dirt'] == 'muddy'
+
+
+def lanestrength(horse, lane):
+    return(
+        u.horses_per - lane < 2 and horse.secret == 4
+        or (lane < 3 and horse.secret == 3)
+    )
+
+
+def hotstrength(horse):
+    return horse.secret == 1 and u.weather['temp'] > 33
+
+
+def warmstrength(horse):
+    return horse.secret == 1 and u.weather['temp'] > 26
+
+def dampstrength(horse):
+    return horse.secret == 2 and u.weather['dirt'] == 'damp'
+
+def muddystrength(horse):
+    return horse.secret == 2 and u.weather['dirt'] == 'muddy'
 
 def shuffle():
     '''monitor conditions through race'''
@@ -317,40 +356,39 @@ def shuffle():
                 horse.rise('both', 0 - d(1, 2))
             else: horse.rise('both', d(0, 1))
 
-        elif horse.weakness == 2 and u.weather['dirt'] == 'damp':
+        elif damptrack(horse):
             if d(0, 1) == 1:
                 horse.rise('speed', 0 - d(1, 2))
             else: horse.rise('str', d(0, 1))
 
-        elif horse.weakness == 2 and u.weather['dirt'] == 'muddy':
+        elif muddytrack(horse):
             if d(0, 1) == 1:
                 horse.rise('speed', 0 - d(2, 3))
             else: horse.rise('str', d(0, 1))
 
 # weaknesses ^ ---------- ^
 
-        if (u.horses_per - lane < 2 and horse.secret == 4) \
-               or (lane < 3 and horse.secret == 1):
+        if lanestrength(horse, lane):
             if d(0, 1) == 1:
                 horse.rise('speed', d(0, 2))
             else: horse.rise('speed', d(0, 1))
 
-        elif horse.secret == 1 and u.weather['temp'] > 33:
+        elif hotstrength(horse):
             if d(0, 1) == 1:
                 horse.rise('both', d(0, 1))
             else: horse.rise('str', d(0, 2))
 
-        elif horse.secret == 1 and u.weather['temp'] > 26:
+        elif warmstrength(horse):
             if d(0, 1) == 1:
                 horse.rise('str', d(0, 1))
             else: horse.rise('both', d(0, 1))
 
-        elif horse.secret == 2 and u.weather['dirt'] == 'damp':
+        elif dampstrength(horse):
             if d(0, 1) == 1:
                 horse.rise('str', 1)
             else: horse.rise('speed', 1)
 
-        elif horse.secret == 2 and u.weather['dirt'] == 'muddy':
+        elif muddystrength(horse):
             if d(0, 1) == 1:
                 horse.rise('both', 1)
             else: horse.rise('str', 1)
@@ -383,10 +421,7 @@ def shuffle():
         points += horse.trackpoints * 0.23
 
         while points in shuffler:
-            if d(0, 1):
-                points += 0.01
-            else:
-                points -= 0.01
+            points += 0.01
 
         shuffler[points] = horse
 
