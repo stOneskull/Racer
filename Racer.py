@@ -344,23 +344,17 @@ def muddystrength(horse):
 
 def checkhorseweakness(horse, lane):
     if laneresistance(horse, lane):
-        if d(0, 1) == 1:
-            horse.rise('speed', 0 - d(2, 4))
-        else: horse.rise('speed', d(-2, 0))
+        horse.rise('speed', d(-4, 0))
 
     elif veryhot(horse):
-        if d(0, 1) == 1:
-            horse.rise('str', 0 - d(2, 4))
-        else: horse.rise('both', d(-2, 0))
+        horse.rise('str', d(-4, -2)) if d(0, 1) else horse.rise('both', d(-2, -1))
 
     elif hot(horse):
-        if d(0, 1) == 1:
-            horse.rise('both', 0 - d(1, 2))
-        else: horse.rise('both', d(0, 1))
+        horse.rise('both', d(-2, 1))
 
     elif damptrack(horse):
         if d(0, 1) == 1:
-            horse.rise('speed', 0 - d(1, 2))
+            horse.rise('speed', d(-2, -1))
         else: horse.rise('str', d(0, 1))
 
     elif muddytrack(horse):
@@ -538,9 +532,7 @@ def updown(diffsdict):
 
         e = u.possy.index(h) + 1
         if e < 4:
-            if e == 1: r = 'into first'
-            if e == 2: r = 'into second'
-            if e == 3: r = 'into third'
+            r = {1: 'into first', 2: 'into second', 3: 'into third'}[e]
         elif u.possy[-1] == h:
             r = 'into last'
         else: r = '..'
@@ -557,6 +549,9 @@ def updown(diffsdict):
         print(c, h, m, a, s, t, r)
 
         sh(1.4)
+
+def veryhothorse(horse):
+    pass
 
 
 def hothorse(horse):
@@ -614,11 +609,10 @@ def race():
         print(f'\n  {horse} enters stall {lane}')
         sh(1.5)
 
-        if (u.horses_per - lane < 2 and horse.weakness == 4) \
-           or (lane < 3 and horse.weakness == 3):
+        if laneresistance(horse, lane):
             resistance(horse)
 
-        elif horse.weakness == 1 and u.weather['temp'] > 26:
+        elif hot(horse):
             hothorse(horse)
 
 
@@ -921,8 +915,7 @@ def guide():
 
     print('\nEnter lane number to view horse details')
 
-    while lane - 1 not in range(u.horses_per):
-        if lane == 0: break
+    while lane - 1 not in range(u.horses_per) and lane != 0:
         try: lane = int(input('type 0 to close guide\n'))
         except: continue
 
@@ -1318,7 +1311,7 @@ def broadcast():
 
     print('\n\nOn comes the morning radio broadcast..\n')
 
-    sh(1); print(u.today); sh(1)
+    shpsh(1, u.today, 1)
 
     u.weather = nature()
 
@@ -1425,11 +1418,6 @@ def setup():
         horse = Horse(name)  # instance creation!
         u.D[horse.number] = horse  # instance into dictionary
 
-        print('Importing..')
-        print(f'{horse.number:02d} {horse}')
-        print(f'star: {horse.rank}')
-        print('---------------------------------')
-
         if horse.rank == 1:
             horse.star('Golden Champion')
             horse.star('Rank 1')
@@ -1437,6 +1425,12 @@ def setup():
             horse.star('Born Champion')
         if horse.rank < 11:
             horse.star('Top Ten Breed')
+
+        print('Importing..')
+        print(f'{horse.number:02d} {horse}')
+        print(f'star: {horse.rank}')
+        print('---------------------------------')
+
         sh(0.13)
 
     sh(2)
