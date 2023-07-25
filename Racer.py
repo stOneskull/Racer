@@ -1428,7 +1428,7 @@ def setup():
 
         print('Importing..')
         print(f'{horse.number:02d} {horse}')
-        print(f'world rank: {horse.rank}')
+        print(f'rank: {horse.rank} | stars: {horse.stars}')
         print('---------------------------------')
 
         sh(0.13)
