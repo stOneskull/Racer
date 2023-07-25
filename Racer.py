@@ -1395,6 +1395,31 @@ def intro():
     return game
 
 
+def importprint(horse):
+    print('Importing..')
+    print(f'{horse.number:02d} {horse}')
+    print(f'rank: {horse.rank} | stars: {horse.stars}')
+    print('---------------------------------')
+
+    sh(0.13)
+
+
+def importhorses():
+    for name in u.gamehorses:
+        horse = Horse(name)  # instance creation!
+        u.D[horse.number] = horse  # instance into dictionary
+
+        if horse.rank == 1:
+            horse.star('Golden Champion')
+            horse.star('Rank 1')
+        elif horse.rank < 6:
+            horse.star('Born Champion')
+        if horse.rank < 11:
+            horse.star('Top Ten Breed')
+
+        importprint(horse)
+
+
 def setup():
     '''new game.. initialise horses'''
 
@@ -1413,25 +1438,7 @@ def setup():
 
     clr(3)
 
-    for name in u.gamehorses:
-
-        horse = Horse(name)  # instance creation!
-        u.D[horse.number] = horse  # instance into dictionary
-
-        if horse.rank == 1:
-            horse.star('Golden Champion')
-            horse.star('Rank 1')
-        elif horse.rank < 6:
-            horse.star('Born Champion')
-        if horse.rank < 11:
-            horse.star('Top Ten Breed')
-
-        print('Importing..')
-        print(f'{horse.number:02d} {horse}')
-        print(f'rank: {horse.rank} | stars: {horse.stars}')
-        print('---------------------------------')
-
-        sh(0.13)
+    importhorses()
 
     sh(2)
 
