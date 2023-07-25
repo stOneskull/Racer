@@ -408,6 +408,7 @@ def otherhorsechecks(horse):
         if u.seggy > 6 and horse.strength > 75 and horse.speed < 75:
             horse.speed += horse.speed * 0.023
 
+
 def shuffle():
     '''monitor conditions through race'''
 
@@ -424,7 +425,6 @@ def shuffle():
 
         otherhorsechecks(horse)
         
-
         horse.strength += horse.strength * 0.023
 
         horse.trackpoints += (horse.strength - strength)
@@ -440,7 +440,7 @@ def shuffle():
     return shuffler
 
 
-def shufflepossy(say):
+def shufflepossy(say=''):
     possy(u.possy, halt=1)
     clr()
     print(say)
@@ -469,7 +469,7 @@ def raceroutine(segments):
             startnhalf()
 
         elif u.seggy == segments:  # if last leg
-            possy(u.possy, halt=1)
+            shufflepossy()
 
         elif u.seggy == 5:  # if into a second lap
             startnhalf()
@@ -501,8 +501,8 @@ def raceroutine(segments):
             shpsh(1.2, f'\n     with {u.possy[2]} just behind them', 3)
             clr()
             print('\nThe horses pass the post..')
-            shpsh(1, "\nIt's all over..", 2)
-            possy(u.possy, halt=1)
+            shpsh(1, "\nIt's all over..", 3)
+            shufflepossy()
 
             for position, horsey in enumerate(u.possy):
                 horsey.runs += 1
