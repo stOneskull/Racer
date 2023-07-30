@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-__version__ = '0.1.23.4'
+__version__ = '0.1.23.5'
 
 '''Racer
 (c)2017->
@@ -26,12 +26,6 @@ def clr(lines=99):
 def sh(secs):
     '''pause by wait'''
     pause(secs * u.wait)
-
-
-def pshp(secs):
-    print()
-    sh(secs)
-    print()
 
 
 def shpsh(secsa, text, secsb):
@@ -196,13 +190,11 @@ def diffs(oldpossy):
 
     updown(diffsdict)
 
-    pshp(1.5)
+    shpsh(1.5, '\n', 0)
     for position, horsey in enumerate(u.possy):
         print(f'{position + 1}: {horsey}', end=" ")
         print(' <-- your horse') if horsey in u.ticket else print()
-    sh(1)
-    print()
-    pshp(2.3)
+    shpsh(1, '', 2.3)
 
 
 
@@ -887,9 +879,6 @@ def garden():
     return bye if u.bye == 1 else menu
 
 
-
-
-
 def guide():
     '''show list of horses and their odds
         on picking a horse, show bio about horse'''
@@ -980,8 +969,7 @@ def bet(lane):
 
         if len(u.ticket) < u.bets and u.money >= 1:
             print('\n    You may bet on another horse')
-            a = input('  Enter 1 to bet again.  ')
-            if a == '1':
+            if input('  Enter 1 to bet again.  ') == '1':
                 return bookie
 
         betdone()
@@ -992,14 +980,13 @@ def bet(lane):
 def checkticket():
     flag('bookie')
 
-    print('\nYour ticket:', u.ticket)
+    print(f'\nYour ticket: {u.ticket}')
     winner = u.possy[0]
     winner.wins += 1
-    print('\nWinner:', winner)
+    print(f'\nWinner: {winner}')
 
-    if winner in u.ticket:
-        uwin(winner)
-    else: sh(2); print('\nBetter luck tomorrow..')
+    if winner in u.ticket: uwin(winner)
+    else: shpsh(2, '\nBetter luck tomorrow..', 0)
 
     u.bag['ticket'] = 0
 
@@ -1019,7 +1006,10 @@ def uwin(winner):
 
 
 def bookiebet():
-    print('\nInside the small tent you tap start on the betting terminal..')
+    print('''
+        Inside the small tent..
+            you tap on the betting terminal..
+          ''')
 
     saymoney()
 
@@ -1046,11 +1036,9 @@ def bookiebet():
     if lane != 0:
         return bet(lane)
 
-    if not u.ticket: return menu
-
-    print(u.ticket)
-
-    betdone()
+    if u.ticket:
+        print(u.ticket)
+        betdone()
 
     return menu
 
@@ -1129,8 +1117,7 @@ def choosehorses(numhorses):
     '''make a list of random horses for the game'''
 
     gamehorses = []
-    file = 'horselist.dat'
-    wholelist = get(file)
+    wholelist = get('horselist.dat')
 
     while len(gamehorses) < numhorses:
 
@@ -1190,7 +1177,7 @@ def gameover():
                         ''')
 
     if 'q' in decision.lower():
-        Heart = False
+        Heart = None
 
     print(); sh(1); print(); sh(2)
 
@@ -1240,10 +1227,9 @@ def day():
 
     clr()
 
-    print('Day {0} - {1}'.format(u.day, u.today))
+    print(f'''Day {u.day} - {u.today}
 
-    print('''
-
+          
   Good morning.
 
       You stuff your bag, cleaning your sleeping area.
@@ -1253,6 +1239,7 @@ def day():
 
     It's time to fly
 
+          
             ''')
 
     sh(1.2)
@@ -1401,7 +1388,7 @@ def importprint(horse):
     print(f'rank: {horse.rank} | stars: {horse.stars}')
     print('---------------------------------')
 
-    sh(0.13)
+    sh(0.23)
 
 
 def importhorses():
@@ -1439,7 +1426,6 @@ def setup():
     clr(3)
 
     importhorses()
-
     sh(2)
 
     return intro
@@ -1528,12 +1514,7 @@ def load():
     sh(1)
 
     for horse in u.D.values():
-
-        print('Importing..')
-        print(f'{horse.number:02d} {horse}')
-        print(f'star: {horse.rank}')
-        print('---------------------------------')
-        sh(0.23)
+        importprint(horse)
 
     sh(2)
     clr()
