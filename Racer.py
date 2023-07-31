@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-__version__ = '0.1.23.5'
+__version__ = '0.1.23.6' #weeding
 
 '''Racer
 (c)2017->
@@ -339,26 +339,23 @@ def checkhorseweakness(horse, lane):
         horse.rise('speed', d(-4, 0))
 
     elif veryhot(horse):
-        horse.rise('str', d(-4, -2)) if d(0, 1) else horse.rise('both', d(-2, -1))
+        if d(0,1): horse.rise('str', d(-4, -2))
+        else: horse.rise('both', d(-2, -1))
 
     elif hot(horse):
         horse.rise('both', d(-2, 1))
 
     elif damptrack(horse):
-        if d(0, 1) == 1:
-            horse.rise('speed', d(-2, -1))
-        else: horse.rise('str', d(0, 1))
+        if d(0, 1) == 1: horse.rise('str', d(0, 1))
+        else: horse.rise('speed', d(-2, -1))
 
     elif muddytrack(horse):
-        if d(0, 1) == 1:
-            horse.rise('speed', 0 - d(2, 3))
-        else: horse.rise('str', d(0, 1))
+        if d(0, 1) == 1: horse.rise('str', d(0, 1))
+        else: horse.rise('speed', 0 - d(2, 3))
 
 def checkhorsestrength(horse, lane):
     if lanestrength(horse, lane):
-        if d(0, 1) == 1:
-            horse.rise('speed', d(0, 2))
-        else: horse.rise('speed', d(0, 1))
+        horse.rise('speed', d(0, 2))
 
     elif hotstrength(horse):
         if d(0, 1) == 1:
