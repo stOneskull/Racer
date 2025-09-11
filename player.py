@@ -46,19 +46,19 @@ class U:
         self.ticket = {}
         self.today = 'Now'
 
-        def saybag(self):
-            '''prints out inventory'''
-            print("\n        You own..\n")
+    def saybag(self):
+        '''prints out inventory'''
+        print("\n        You own..\n")
 
-            for thing, amount in self.bag.items():
-                if amount < 1: continue
-                amount = '' if amount == 1 else f'({amount})'
-                print('                ', thing, amount)
-            print('                              ',
-                f'and ${self.money:.2f} cash')
+        for thing, amount in self.bag.items():
+            if amount < 1: continue
+            amount = '' if amount == 1 else f'({amount})'
+            print('                ', thing, amount)
+        print('                              ',
+            f'and ${self.money:.2f} cash')
 
-        def saymoney(self):
-            '''prints out player wallet value'''
+    def saymoney(self):
+        '''prints out player wallet value'''
 
-            self.money = round(self.money, 2)
-            print(f'\nYou have ${self.money:0.2f}')
+        self.money = round(self.money, 2)
+        print(f'\nYou have ${self.money:0.2f}')
