@@ -904,7 +904,7 @@ def bet(lane):
 
         print('\nYou are betting on %s' % horse)
         print('Enter 0 to cancel bet')
-        u.u.saymoney()
+        u.saymoney()
 
         try:
             thebet = int(input('\nHow much to bet? '))
@@ -1227,7 +1227,7 @@ def lanes():
         u.lanes[lane].lane = lane  # love dat line
 
         horsi = u.lanes[lane]
-        odds(horsi)  # calculate horse odds
+        horsi.odds()  # calculate horse odds
 
         horsi.notice = " "
         if horsi.stars > 0:
