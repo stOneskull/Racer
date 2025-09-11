@@ -2,7 +2,7 @@ from random import randint as d
 
 
 class Horse:
-    '''to make each horse an object'''
+    '''to make each self an object'''
 
     counter = 0
 
@@ -50,8 +50,22 @@ class Horse:
             self.star('Rank 1')
 
     def star(self, badge):
-        '''add achievement badge to horse'''
+        '''add achievement badge to self'''
         if badge not in self.badges:
             self.badges.append(badge)
             self.stars += 1
 
+    def odds(self):
+        '''secret bookie formula'''
+
+        theodds = self.rank / 2 + 1.23
+
+        changer = d(-23, 23)
+        if changer == 0: changer = 0.01
+        else: changer *= 0.007
+        changer += 1
+
+        theodds *= changer
+
+        self.odds = theodds
+        self.oddstring = f'{round(theodds, 1):05.2f}'

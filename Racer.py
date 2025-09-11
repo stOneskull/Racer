@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-__version__ = '0.1.23.6' #weeding
+__version__ = '0.1.23.8a' #weeding
 
 '''Racer
 (c)2017->
@@ -51,27 +51,10 @@ def nature():
             'dirt': dirt, 'sky': sky}
 
 
-def saybag():
-    '''prints out inventory'''
-
-    clr()
-    print("\n        You own..\n")
-
-    for thing, amount in u.bag.items():
-        if amount < 1: continue
-        amount = '' if amount == 1 else f'({amount})'
-        print('                ', thing, amount)
-    print('                              ',
-          f'and ${u.money:.2f} cash')
-
-    return menu
 
 
-def saymoney():
-    '''prints out player wallet value'''
 
-    u.money = round(u.money, 2)
-    print(f'\nYou have ${u.money:0.2f}')
+
 
 
 def flag(theflag, hide=1):
@@ -218,20 +201,7 @@ def bye():
     return gameover
 
 
-def odds(horse):
-    '''secret bookie formula'''
 
-    theodds = horse.rank / 2 + 1.23
-
-    changer = d(-23, 23)
-    if changer == 0: changer = 0.01
-    else: changer *= 0.007
-    changer += 1
-
-    theodds *= changer
-
-    horse.odds = theodds
-    horse.oddstring = f'{round(theodds, 1):05.2f}'
 
 
 def startnhalf():
@@ -639,8 +609,6 @@ def race():
     raceroutine(segments)
 
 
-
-
 def sleep():
     '''zzZ'''
 
@@ -825,7 +793,7 @@ def findmoney():
     else:
         print('    You find', lucky, 'dollars.')
     u.money += lucky
-    sh(1.5); saymoney(); sh(1.5)
+    sh(1.5); u.u.saymoney(); sh(1.5)
 
 
 def garden():
@@ -936,7 +904,7 @@ def bet(lane):
 
         print('\nYou are betting on %s' % horse)
         print('Enter 0 to cancel bet')
-        saymoney()
+        u.u.saymoney()
 
         try:
             thebet = int(input('\nHow much to bet? '))
@@ -992,14 +960,14 @@ def uwin(winner):
     sh(5)
     print('\n !! ! !! ! Winner ! !! ! !!')
     sh(3)
-    saymoney()
+    u.saymoney()
     sh(3)
     a = u.ticket[winner] * winner.odds
     winnings = round(a, 2)
     u.money += winnings
     print(f'\nYou receive ${winnings:0.2f}!')
     sh(3)
-    saymoney()
+    u.saymoney()
 
 
 def bookiebet():
@@ -1008,7 +976,7 @@ def bookiebet():
             you tap on the betting terminal..
           ''')
 
-    saymoney()
+    u.saymoney()
 
     print('\n  \\|  Enter lane number to bet on horse  \n')
 
@@ -1145,7 +1113,10 @@ def menu():
         try: path = int(input('\n '))
         except: continue
 
-        if path == 1: return saybag
+        if path == 1:
+            clr()
+            u.saybag()
+            return menu
 
         if (path in u.doors
                 and u.doors[path] in u.flags
@@ -1372,7 +1343,7 @@ def intro():
 
             ''')
 
-    saymoney()
+    u.saymoney()
 
     input('\n Are you ready? \n  ')
 
